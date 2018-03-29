@@ -1,0 +1,16 @@
+section .data               ;secao de dados
+msg: db "Ola Mundo", 0x0a   ;cada byte tem um numero na tabela ascii, o segundo valor: 0x0a corresponde a newline
+tam: equ $-msg              ;tam vai ser igual a posição atual de tam menos o label da msg
+
+section .text               ;secao de texto do código
+global _start               ;declara o simbolo start que é global, para ficar visivel 
+
+_start:                     ;cria o simbolo 
+mov R4, tam                 ;quero que 9 bytes (do texto) + 1 byte (nova linha) sejam impressos - tamanho da string
+mov R3, msg                 ;onde está o label desses 19 bytes/ é o label text que contém conteudo - *buf
+mov R2, 1                   ;e qual foi o descriptor? que é stdout - tipo de tela de saida, se 2 : stderror
+mov R1, 4                   ;chama a syscall write - que é codigo 4
+int 0x80                    ;interrupção 80 chama o syscall
+mov R2, 0                   ;coloca o valor 0 como retorno do syscall -> (return 0)
+mov R1, 1                   ;chama a syscall return : que é codigo 1
+int 0x80                    ;interrupção 80 chama o syscall
